@@ -1,6 +1,7 @@
-import { Request, Response } from 'express';
+import { Request, RequestHandler, Response } from 'express';
 import StudentProfile from '../models/StudentProfile';
 import { AuthRequest } from '../middleware/auth';
+import User from '../models/User';
 
 export const createOrUpdateProfile = async (req: Request, res: Response) => {
   try {
@@ -19,13 +20,21 @@ export const createOrUpdateProfile = async (req: Request, res: Response) => {
   }
 };
 
-export const getMyProfile = async (req: Request, res: Response) => {
+
+export const getMyProfile: RequestHandler = async (req, res): Promise<void> => {
   try {
     const authReq = req as AuthRequest;
+    
+    const user = await User.findById(authReq.user!.id).select('-password');
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return; // Make sure you return after sending a response
+    }
 
-    const profile = await StudentProfile.findOne({ userId: authReq.user!.id });
-    res.json(profile);
+    res.json({ user });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to get profile' });
+    console.error(err);
+    res.status(500).json({ error: 'Failed to get user profile' });
   }
 };
+

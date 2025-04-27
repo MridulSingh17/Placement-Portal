@@ -1,7 +1,5 @@
-// src/pages/MyApplications.tsx
-
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance'; // Corrected: use your axiosInstance
 
 interface Application {
   _id: string;
@@ -20,18 +18,12 @@ const MyApplications = () => {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await axios.get('/api/applications/my', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axiosInstance.get('/api/applications/my');
         setApplications(res.data);
       } catch (err) {
         console.error('Failed to fetch applications', err);
       }
     };
-
     fetchApplications();
   }, []);
 

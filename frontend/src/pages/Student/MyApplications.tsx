@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
+
 
 interface Application {
   _id: string;
@@ -19,10 +20,19 @@ const MyApplications = () => {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const res = await axios.get('/api/applications/mine');
+        const token = localStorage.getItem('token'); // ✅ get token
+        if (!token) {
+          alert('You are not authorized');
+          return;
+        }
+
+        const res = await axiosInstance.get('/api/applications/mine', {
+          headers: { Authorization: `Bearer ${token}` }, // ✅ pass token
+        });
+
         setApplications(res.data);
       } catch (error) {
-        console.error('Failed to fetch your applications');
+        console.error('Failed to fetch your applications', error);
       }
     };
 

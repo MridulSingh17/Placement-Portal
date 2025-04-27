@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
+import { AuthRequest } from '../middleware/auth'; 
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
@@ -43,23 +44,14 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
-    console.log('Request body:', req.body);
-
     const user = await User.findOne({ email });
-
-    console.log('User found:', user);
-
     if (!user) {
-      console.log('User not found');
       res.status(401).json({ message: 'Invalid credentials' });
       return;
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log('Password match:', isMatch);
-
     if (!isMatch) {
-      console.log('Password does not match');
       res.status(401).json({ message: 'Invalid credentials' });
       return;
     }
@@ -73,9 +65,22 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       user: { id: user._id, name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
-    console.error('Login error:', err);
     res.status(500).json({ error: 'Login failed' });
   }
 };
 
 
+export const getMyProfile = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const authReq = req as AuthRequest;
+    const user = authReq.user;
+    if (!user) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    res.json({ user });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to get profile' });
+  }
+};
