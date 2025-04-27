@@ -18,29 +18,30 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const jobRes = await axios.get('/api/jobs');
-        setJobs(jobRes.data);
-
-        if (token) {
-          const userRes = await axios.get('/api/auth/profile', {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          setRole(userRes.data.role);
-
-          if (userRes.data.role === 'student') {
-            const apps = await axios.get('/api/applications/my', {
+        try {
+          const token = localStorage.getItem('token');
+          const jobRes = await axios.get('/api/jobs');
+          setJobs(jobRes.data);
+      
+          if (token) {
+            const userRes = await axios.get('/api/auth/profile', {
               headers: { Authorization: `Bearer ${token}` },
             });
-            const jobIds = apps.data.map((a: any) => a.jobId);
-            setAppliedJobs(jobIds);
+            console.log('User profile:', userRes.data); // Add this temporarily
+            setRole(userRes.data.user?.role || '');
+      
+            if (userRes.data.user?.role === 'student') {
+              const apps = await axios.get('/api/applications/my', {
+                headers: { Authorization: `Bearer ${token}` },
+              });
+              const jobIds = apps.data.map((a: any) => a.jobId);
+              setAppliedJobs(jobIds);
+            }
           }
+        } catch (err) {
+          console.error(err);
         }
-      } catch (err) {
-        console.error(err);
-      }
-    };
+      };
 
     fetchData();
   }, []);
@@ -63,9 +64,11 @@ const Dashboard = () => {
     <div className="p-6">
       {role === 'admin' && <PostJobForm />}
 
+      <div className="text-center text-gray-500 text-xl my-8">Loading...</div>
+
       <h1 className="text-3xl font-bold mb-6">Available Jobs</h1>
       <div className="grid gap-4">
-        {jobs.map((job) => (
+        {Array.isArray(jobs) && jobs.map((job) => (
           <div key={job._id} className="p-4 border rounded shadow">
             <h2 className="text-xl font-semibold">{job.title}</h2>
             <p className="text-gray-600">{job.company} - {job.location}</p>

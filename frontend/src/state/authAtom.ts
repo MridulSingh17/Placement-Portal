@@ -1,16 +1,20 @@
 import { atom } from 'recoil';
 
-interface AuthState {
+export interface AuthState {
   isLoggedIn: boolean;
-  token: string | null;
-  role: string | null;
+  token: string;
+  role: string;
+  userId: string; 
 }
+
+const defaultAuthState: AuthState = {
+  isLoggedIn: false,
+  token: '',
+  role: '',
+  userId: '',
+};
 
 export const authState = atom<AuthState>({
   key: 'authState',
-  default: {
-    isLoggedIn: false,
-    token: null,
-    role: null,
-  },
+  default: defaultAuthState,
 });

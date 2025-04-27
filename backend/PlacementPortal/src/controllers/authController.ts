@@ -43,15 +43,24 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
+    console.log('Request body:', req.body);
+
     const user = await User.findOne({ email });
+
+    console.log('User found:', user);
+
     if (!user) {
-      res.status(400).json({ message: 'Invalid credentials' });
+      console.log('User not found');
+      res.status(401).json({ message: 'Invalid credentials' });
       return;
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log('Password match:', isMatch);
+
     if (!isMatch) {
-      res.status(400).json({ message: 'Invalid credentials' });
+      console.log('Password does not match');
+      res.status(401).json({ message: 'Invalid credentials' });
       return;
     }
 
@@ -64,6 +73,9 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       user: { id: user._id, name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
+    console.error('Login error:', err);
     res.status(500).json({ error: 'Login failed' });
   }
 };
+
+
