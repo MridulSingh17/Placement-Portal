@@ -28,7 +28,7 @@ export const getMyProfile: RequestHandler = async (req, res): Promise<void> => {
     const user = await User.findById(authReq.user!.id).select('-password');
     if (!user) {
       res.status(404).json({ error: 'User not found' });
-      return; // Make sure you return after sending a response
+      return; 
     }
 
     res.json({ user });

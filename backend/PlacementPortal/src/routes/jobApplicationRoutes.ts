@@ -6,15 +6,12 @@ const router = express.Router();
 
 router.post('/apply', authenticateToken, authorizeRole('student'), applyToJob);
 
-router.get('/my-applications', authenticateToken, authorizeRole('student'), getStudentApplications);
+router.get('/my', authenticateToken, authorizeRole('student'), getStudentApplications);
 
 router.put('/:applicationId/status', authenticateToken, authorizeRole('admin'), updateApplicationStatus);
 
 router.get('/job/:jobId', authenticateToken, authorizeRole('admin'), getApplicationsByJobId);
 
-router.get('/job/:jobId', authenticateToken, authorizeRole('admin'), getApplicationsByJob);
-
+router.get('/student', authenticateToken, authorizeRole('student'), getApplicationsByStudent);
 
 export default router;
-
-router.get('/student', authenticateToken, authorizeRole('student'), getApplicationsByStudent);

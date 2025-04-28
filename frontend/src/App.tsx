@@ -12,10 +12,10 @@ import Unauthorized from './pages/Unauthorized';
 import useAuthSync from './hooks/useAuthSync';
 import useInitializeAuth from './hooks/useInitializeAuth';
 
-
 const App = () => {
-  useAuthSync()
-  useInitializeAuth
+  useAuthSync();
+  useInitializeAuth();
+
   return (
     <>
       <Navbar />
@@ -23,13 +23,14 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
 
-
         <Route element={<ProtectedRoute allowedRoles={['student', 'admin']} />}>
           <Route path="/" element={<Dashboard />} />
-        </Route>      
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
           <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/manage-applications" element={<ManageApplications/>} />
+          <Route path="/manage-applications" element={<ManageApplications />} />
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['student']} />}>
@@ -37,7 +38,7 @@ const App = () => {
           <Route path="/my-applications" element={<MyApplications />} />
         </Route>
 
-        <Route path="/unauthorized" element={<Unauthorized/>} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
       </Routes>
     </>
   );

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosinstance from '../api/axiosInstance';
-import Mait_logo from '/Mait_Logo.png'; // Import the image
+import Mait_logo from '/Mait_Logo.png';
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -19,7 +19,7 @@ const Register = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axiosinstance.post('/api/auth/register', form); // Correct usage
+      await axiosinstance.post('/api/auth/register', form); 
       navigate('/login');
     } catch (err) {
       alert('Registration failed');

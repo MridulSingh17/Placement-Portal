@@ -28,7 +28,7 @@ const Dashboard = () => {
 
         if (userRes.data.user?.role === 'student') {
           const apps = await axiosInstance.get('/api/applications/my');
-          const jobIds = apps.data.map((a: any) => a.jobId._id); // <-- Fix: get nested _id
+          const jobIds = apps.data.map((a: any) => a.jobId._id);
           setAppliedJobs(jobIds);
         }
       } catch (err) {
@@ -43,7 +43,7 @@ const Dashboard = () => {
 
   const handleApply = async (jobId: string) => {
     try {
-      await axiosInstance.post('/api/applications', { jobId });
+      await axiosInstance.post('/api/applications/apply', { jobId });
       setAppliedJobs((prev) => [...prev, jobId]);
     } catch (err) {
       console.error('Failed to apply:', err);

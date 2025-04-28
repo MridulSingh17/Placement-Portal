@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 
-
 interface Application {
   _id: string;
   jobId: {
@@ -20,16 +19,7 @@ const MyApplications = () => {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const token = localStorage.getItem('token'); // ✅ get token
-        if (!token) {
-          alert('You are not authorized');
-          return;
-        }
-
-        const res = await axiosInstance.get('/api/applications/mine', {
-          headers: { Authorization: `Bearer ${token}` }, // ✅ pass token
-        });
-
+        const res = await axiosInstance.get('/api/applications/my-applications');
         setApplications(res.data);
       } catch (error) {
         console.error('Failed to fetch your applications', error);
@@ -47,8 +37,12 @@ const MyApplications = () => {
           <div key={app._id} className="p-4 border rounded shadow">
             <h2 className="text-xl font-semibold">{app.jobId.title}</h2>
             <p className="text-gray-600">{app.jobId.company} - {app.jobId.location}</p>
-            <p className="mt-2">Status: <strong>{app.status}</strong></p>
-            <p className="mt-2 text-sm text-gray-500">Applied on: {new Date(app.appliedOn).toLocaleDateString()}</p>
+            <p className="mt-2">
+              Status: <strong>{app.status}</strong>
+            </p>
+            <p className="mt-2 text-sm text-gray-500">
+              Applied on: {new Date(app.appliedOn).toLocaleDateString()}
+            </p>
           </div>
         ))}
       </div>
