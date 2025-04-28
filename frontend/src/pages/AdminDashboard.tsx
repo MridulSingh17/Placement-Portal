@@ -1,73 +1,24 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-
-interface Application {
-  _id: string;
-  studentId: {
-    _id: string;
-    name: string;
-    email: string;
-  };
-  jobId: {
-    _id: string;
-    title: string;
-  };
-  status: string;
-}
+import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
-  const [applications, setApplications] = useState<Application[]>([]);
-
-  useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        const res = await axios.get('/api/applications');
-        setApplications(res.data);
-      } catch (error) {
-        console.error('Failed to fetch applications');
-      }
-    };
-
-    fetchApplications();
-  }, []);
-
-  const updateStatus = async (appId: string, status: string) => {
-    try {
-      await axios.put(`/api/applications/${appId}`, { status });
-      setApplications((prev) =>
-        prev.map((app) =>
-          app._id === appId ? { ...app, status } : app
-        )
-      );
-    } catch (error) {
-      console.error('Failed to update status');
-    }
-  };
-
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Manage Applications</h1>
-      <div className="grid gap-4">
-        {applications.map((app) => (
-          <div key={app._id} className="p-4 border rounded shadow">
-            <h2 className="text-xl font-semibold">{app.studentId.name}</h2>
-            <p className="text-gray-600">{app.studentId.email}</p>
-            <p className="mt-2">Applied for: <strong>{app.jobId.title}</strong></p>
-            <p className="mt-2">Status: <strong>{app.status}</strong></p>
+      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
-            <div className="flex gap-2 mt-4">
-              {['shortlisted', 'selected', 'rejected'].map((status) => (
-                <button
-                  key={status}
-                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-                  onClick={() => updateStatus(app._id, status)}
-                >
-                  {status}
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
+      <div className="grid gap-6">
+        <Link
+          to="/manage-applications"
+          className="block px-6 py-4 bg-blue-600 text-white rounded-lg text-center hover:bg-blue-700 transition"
+        >
+          Manage Applications
+        </Link>
+
+        <Link
+          to="/post-job"
+          className="block px-6 py-4 bg-green-600 text-white rounded-lg text-center hover:bg-green-700 transition"
+        >
+          Post a New Job
+        </Link>
       </div>
     </div>
   );

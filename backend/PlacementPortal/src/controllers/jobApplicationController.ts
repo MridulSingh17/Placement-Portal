@@ -130,3 +130,15 @@ export const getApplicationsByJob = async (req: Request, res: Response): Promise
     res.status(500).json({ error: 'Failed to fetch applications for this job' });
   }
 };
+
+export const getAllApplications = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const applications = await JobApplication.find()
+      .populate('studentId', 'name email')
+      .populate('jobId', 'title company');
+    res.json(applications);
+  } catch (error) {
+    console.error('Error fetching all applications:', error);
+    res.status(500).json({ error: 'Failed to fetch all applications' });
+  }
+};

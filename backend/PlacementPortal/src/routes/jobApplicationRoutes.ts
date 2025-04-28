@@ -1,10 +1,20 @@
 import express from 'express';
-import { applyToJob, getApplicationsByJob, getApplicationsByJobId, getApplicationsByStudent, getStudentApplications, updateApplicationStatus } from '../controllers/jobApplicationController';
+import { 
+  applyToJob, 
+  getAllApplications, 
+  getApplicationsByJob, 
+  getApplicationsByJobId, 
+  getApplicationsByStudent, 
+  getStudentApplications, 
+  updateApplicationStatus,  
+} from '../controllers/jobApplicationController';
 import { authenticateToken, authorizeRole } from '../middleware/auth';
 
 const router = express.Router();
 
 router.post('/apply', authenticateToken, authorizeRole('student'), applyToJob);
+
+router.get('/', authenticateToken, authorizeRole('admin'), getAllApplications);
 
 router.get('/my', authenticateToken, authorizeRole('student'), getStudentApplications);
 

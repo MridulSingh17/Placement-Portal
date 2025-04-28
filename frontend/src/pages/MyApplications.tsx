@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axiosInstance from '../api/axiosInstance'; // Corrected: use your axiosInstance
+import axiosInstance from '../api/axiosInstance'; 
 
 interface Application {
   _id: string;
