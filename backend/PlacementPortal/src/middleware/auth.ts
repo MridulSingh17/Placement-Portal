@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
-// Define the custom request type with a user field
+
 export interface AuthRequest extends Request {
   user?: {
     id: string;
@@ -11,7 +11,6 @@ export interface AuthRequest extends Request {
   };
 }
 
-// Middleware to authenticate JWT token
 const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;
 
@@ -31,7 +30,6 @@ const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction):
   }
 };
 
-// Middleware to authorize specific roles
 const authorizeRole = (role: string) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user || req.user.role !== role) {

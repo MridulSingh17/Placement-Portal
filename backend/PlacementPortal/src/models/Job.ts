@@ -6,6 +6,8 @@ export interface JobDocument extends Document {
   description: string;
   location: string;
   salary: string;
+  lastDate: string;
+  openings: number;
   postedBy: string;
 }
 
@@ -15,6 +17,8 @@ const jobSchema = new Schema<JobDocument>({
   description: { type: String },
   location: { type: String },
   salary: { type: String },
+  lastDate: { type: String, required: true },
+  openings: { type: Number, required: true },
   postedBy: { type: String, required: true },
 }, {
   timestamps: true,

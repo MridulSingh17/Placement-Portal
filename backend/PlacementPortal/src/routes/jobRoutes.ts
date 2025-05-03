@@ -7,11 +7,10 @@ const router = express.Router();
 router.get('/', getJobs);
 
 router.post(
-    '/',
-    authenticateToken,
-    authorizeRole('admin'),
-    createJob
-  );
-  
+  '/',
+  authenticateToken,
+  authorizeRole('admin'),
+  createJob
+);
 
 export default router;

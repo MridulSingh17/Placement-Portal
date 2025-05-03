@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
 
 interface Job {
   _id: string;
@@ -12,18 +12,24 @@ interface Job {
 const ApplyJob = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [appliedJobIds, setAppliedJobIds] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchJobsAndApplications = async () => {
       try {
-        const jobsRes = await axios.get('/api/jobs');
+        const [jobsRes, appsRes] = await Promise.all([
+          axiosInstance.get('/api/jobs'),
+          axiosInstance.get('/api/applications/my')
+        ]);
+
         setJobs(jobsRes.data);
 
-        const appsRes = await axios.get('/api/applications/mine');
         const appliedIds = appsRes.data.map((app: any) => app.jobId._id);
         setAppliedJobIds(appliedIds);
       } catch (error) {
-        console.error('Failed to fetch jobs or applications');
+        console.error('Failed to fetch jobs or applications', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -32,12 +38,16 @@ const ApplyJob = () => {
 
   const applyToJob = async (jobId: string) => {
     try {
-      await axios.post('/api/applications', { jobId });
+      await axiosInstance.post('/api/applications/apply', { jobId });
+      alert('Application submitted!');
       setAppliedJobIds((prev) => [...prev, jobId]);
     } catch (error) {
-      console.error('Failed to apply to job');
+      console.error('Failed to apply to job', error);
+      alert('Failed to apply. You may have already applied.');
     }
   };
+
+  if (loading) return <div className="p-6 text-center text-lg text-gray-600">Loading jobs...</div>;
 
   return (
     <div className="p-6">

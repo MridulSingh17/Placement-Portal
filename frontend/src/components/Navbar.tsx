@@ -66,14 +66,33 @@ const Navbar = () => {
           </>
         )}
 
-        {auth.isLoggedIn ? (
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded"
-          >
-            Logout
-          </button>
-        ) : (
+        {auth.isLoggedIn && (
+          <>
+            <button
+              onClick={() => navigate('/profile')}
+              className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded"
+            >
+              Profile
+            </button>
+            {auth.role === 'admin' && (
+              <button
+                onClick={() => navigate('/admin/students')}
+                className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded"
+              >
+                View Students
+              </button>
+            )}
+
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded"
+            >
+              Logout
+            </button>
+          </>
+        )}
+
+        {!auth.isLoggedIn && (
           <>
             <button
               onClick={() => navigate('/login')}

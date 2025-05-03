@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
@@ -9,6 +10,8 @@ const PostJobForm = () => {
     location: '',
     description: '',
     salary: '',
+    lastDate: '',
+    openings: '',
   });
   const navigate = useNavigate();
 
@@ -26,7 +29,7 @@ const PostJobForm = () => {
       }
 
       await axiosInstance.post('/api/jobs', formData, {
-        headers: { Authorization: `Bearer ${token}` }, 
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       alert('Job Posted Successfully!');
@@ -46,6 +49,8 @@ const PostJobForm = () => {
         <input name="location" placeholder="Location" value={formData.location} onChange={handleChange} required className="p-2 border" />
         <textarea name="description" placeholder="Job Description" value={formData.description} onChange={handleChange} required className="p-2 border" />
         <input name="salary" placeholder="Salary" value={formData.salary} onChange={handleChange} required className="p-2 border" />
+        <input name="lastDate" type="date" placeholder="Last Date to Apply" value={formData.lastDate} onChange={handleChange} required className="p-2 border" />
+        <input name="openings" type="number" placeholder="Number of Openings" value={formData.openings} onChange={handleChange} required className="p-2 border" />
         <button className="bg-blue-500 text-white px-4 py-2 rounded" type="submit">
           Post Job
         </button>

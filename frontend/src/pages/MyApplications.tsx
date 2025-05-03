@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axiosInstance from '../api/axiosInstance'; 
+import axiosInstance from '../api/axiosInstance';
 
 interface Application {
   _id: string;
@@ -24,6 +24,7 @@ const MyApplications = () => {
         console.error('Failed to fetch applications', err);
       }
     };
+
     fetchApplications();
   }, []);
 

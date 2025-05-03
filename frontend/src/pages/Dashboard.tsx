@@ -9,6 +9,8 @@ interface Job {
   location: string;
   description: string;
   salary?: string;
+  lastDate?: string;
+  openings?: number;
 }
 
 const Dashboard = () => {
@@ -65,7 +67,15 @@ const Dashboard = () => {
                 <h2 className="text-xl font-semibold">{job.title}</h2>
                 <p className="text-gray-600">{job.company} — {job.location}</p>
                 <p className="mt-2">{job.description}</p>
-                {job.salary && <p className="text-sm text-gray-500 mt-1">Salary: {job.salary}</p>}
+                {job.salary && (
+                  <p className="text-sm text-gray-500 mt-1">Salary: {job.salary}</p>
+                )}
+                {job.lastDate && (
+                  <p className="text-sm text-gray-500">Last Date: {job.lastDate}</p>
+                )}
+                {job.openings !== undefined && (
+                  <p className="text-sm text-gray-500">Openings: {job.openings}</p>
+                )}
 
                 {role === 'student' && (
                   <button
